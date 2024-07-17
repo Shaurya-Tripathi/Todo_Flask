@@ -1,0 +1,42 @@
+{%extends 'Layouts/app.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class = "row mt-4 justify-content-center">
+        <div class="col-sm-8 card p-4">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class = "alert alert-success alert-control">
+                    {% for message in messages %}
+                       <li>{{message}}</li> 
+                    {% endfor %}
+                </ul>
+            {% endif %} 
+            {% endwith %}  
+            <h2 class="text-center mb-3">Todo List</h2> 
+            <form action="{{url_for('index',todo_id=todo.id)if todo else url_for('index')}}" method="POST">
+                <div class="input-group mb-3">
+                    <input type="text" name = "title" placeholder = "Enter task" class="form-control form-control-sm" value="{{todo.title if todo else ''}}">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark btn-m" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+            <div class="container container-lg"><h3>Todos:</h3></div>
+            {%for todo in todos %}
+            <div class="row mt-2 ml-2">
+                <div class="col-10">{{todo.title}}</div>
+                <div class="col-2 text-right">
+                    <a href="/{{todo.id}}" class="btn btn-dark btn-sm">Edit</a>
+                    <form class="d-inline", method="POST" action="{{url_for('delete',todo_id=todo.id)}}">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
